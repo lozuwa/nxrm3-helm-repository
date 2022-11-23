@@ -125,6 +125,16 @@ service:
   labels: {}
   annotations: {}
   type: ClusterIP
+  prometheusMetrics:
+    enabled: false
+    prometheusServicePort: 24231
+
+
+serviceMonitor:
+  enabled: false
+  interval: 10s
+  scrapeTimeout: 5s
+  path: /metrics
 
 
 route:

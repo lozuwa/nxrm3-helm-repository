@@ -21,6 +21,11 @@ spec:
     - port: {{ .Values.nexus.nexusPort }}
       protocol: TCP
       name: nexus-ui
+    {{- if .Values.service.prometheusMetrics.enabled }}
+    - port: {{ .Values.service.prometheusMetrics.prometheusServicePort }}
+      protocol: TCP
+      name: prometheus-metrics
+    {{- end }}}
   selector:
     {{- include "nexus.selectorLabels" . | nindent 4 }}
     {{- if .Values.nexus.extraSelectorLabels }}

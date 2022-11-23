@@ -24,7 +24,7 @@ spec:
         {{- with .Values.nexus.extraSelectorLabels }}
           {{ toYaml . | indent 6 }}
         {{- end }}
-      {{- end }}      
+      {{- end }}
   template:
     metadata:
       annotations:
@@ -82,6 +82,10 @@ spec:
           ports:
             - name: nexus-ui
               containerPort: {{ .Values.nexus.nexusPort }}
+            {{- if .Values.service.prometheusMetrics.enabled }}
+            - name: prometheus-metrics
+              containerPort: {{ .Values.service.prometheusMetrics.prometheusServicePort }}}
+            {{- end }}
             {{- if .Values.nexus.docker.enabled }}
             {{- range .Values.nexus.docker.registries }}
             - name: docker-{{ .port }}
@@ -109,7 +113,7 @@ spec:
             timeoutSeconds: {{ .Values.nexus.readinessProbe.timeoutSeconds }}
             {{- end }}
           volumeMounts:
-            - mountPath: /nexus-data	
+            - mountPath: /nexus-data
               name: {{ template "nexus.name" . }}-data
             {{- if .Values.config.enabled }}
             - mountPath: {{ .Values.config.mountPath }}
